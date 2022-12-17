@@ -20,3 +20,5 @@ class StockIncome(models.Model):
     foreign_value = models.FloatField()  # preço
     foreign_fee = models.FloatField()  # custos
     exchange_value = models.FloatField()  # dólar na compra
+
+    history = models.ForeignKey("History", on_delete=models.PROTECT)

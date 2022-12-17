@@ -12,12 +12,11 @@ class Wallet(models.Model):
 class WalletIncome(models.Model):
     """Serve para o registro de fluxo de caixa"""
     value = models.FloatField()
-    national_fee = models.FloatField()
-    foreign_fee = models.FloatField()
-    exchange_value = models.FloatField()
+    national_fee = models.FloatField()  # IOF + Spread
+    exchange_value = models.FloatField()  # Câmbio do dólar
+    foreign_fee = models.FloatField()  # Corretagem
 
     is_dividend = models.BooleanField()
     is_foreign = models.BooleanField()
 
-    date = models.DateField()
-    time = models.TimeField()
+    history = models.ForeignKey("History", on_delete=models.PROTECT)
