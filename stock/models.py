@@ -1,13 +1,22 @@
 from django.db import models
 
 
-# Create your models here.
 class Stock(models.Model):
+    """Carteira de papéis"""
     name = models.CharField(max_length=255)
-    action = models.CharField(max_length=255,
-                              choices={
-                                  "buy": "Buy",
-                                  "sell": "Sell"
-                              })
+    quantity = models.IntegerField()
 
-    
+    live_foreign_value = models.FloatField()
+    value = models.FloatField()
+
+    average_buy_price = models.FloatField()
+
+
+class StockIncome(models.Model):
+    """Serve para o registro do fluxo de stocks"""
+    name = models.CharField(max_length=255)
+    quantity = models.IntegerField()
+
+    foreign_value = models.FloatField()  # preço
+    foreign_fee = models.FloatField()  # custos
+    exchange_value = models.FloatField()  # dólar na compra

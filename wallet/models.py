@@ -1,15 +1,16 @@
 from django.db import models
 
 
-# Create your models here.
 class Wallet(models.Model):
+    """Carteira na corretora"""
     national_value = models.FloatField()
     foreign_value = models.FloatField()
 
     last_addition = models.DateTimeField()
 
 
-class WalletAdd(models.Model):
+class WalletIncome(models.Model):
+    """Serve para o registro de fluxo de caixa"""
     value = models.FloatField()
     national_fee = models.FloatField()
     foreign_fee = models.FloatField()
