@@ -14,7 +14,7 @@ class IRDividendSettings(IRBaseSettings):
 
 class IR(models.Model):
     """Controle de impostos pagos ou não"""
-    history = models.ForeignKey("History", on_delete=models.PROTECT)
+    history = models.ForeignKey("history.History", on_delete=models.PROTECT)
 
     value = models.FloatField()
     paid = models.BooleanField()

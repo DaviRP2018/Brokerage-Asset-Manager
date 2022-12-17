@@ -40,6 +40,8 @@ INSTALLED_APPS = [
 
     "wallet.apps.WalletConfig",
     "stock.apps.StockConfig",
+    "history.apps.HistoryConfig",
+    "gov.apps.GovConfig",
 ]
 
 MIDDLEWARE = [

@@ -19,4 +19,4 @@ class WalletIncome(models.Model):
     is_dividend = models.BooleanField()
     is_foreign = models.BooleanField()
 
-    history = models.ForeignKey("History", on_delete=models.PROTECT)
+    history = models.ForeignKey("history.History", on_delete=models.PROTECT)
