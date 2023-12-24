@@ -1,2 +1,1 @@
-pre-commit
-django
+django==4.2.8

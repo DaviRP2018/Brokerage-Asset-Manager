@@ -3,6 +3,7 @@ from django.db import models
 
 class Stock(models.Model):
     """Carteira de papéis"""
+
     name = models.CharField(max_length=255)
     quantity = models.IntegerField()
 
@@ -14,6 +15,7 @@ class Stock(models.Model):
 
 class StockIncome(models.Model):
     """Serve para o registro do fluxo de stocks"""
+
     name = models.CharField(max_length=255)
     quantity = models.IntegerField()
 

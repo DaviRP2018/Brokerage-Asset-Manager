@@ -1,5 +1,5 @@
 setup-pre-commit:
-	pip install --user pre-commit
+	pip install pre-commit
 	pre-commit install
 
 setup: setup-pre-commit

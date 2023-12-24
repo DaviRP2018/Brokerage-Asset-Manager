@@ -1,7 +1,7 @@
 from django.db import models
 
 
-class Wallet(models.Model):
+class Balance(models.Model):
     """Carteira na corretora"""
     national_value = models.FloatField()
     foreign_value = models.FloatField()
@@ -9,7 +9,7 @@ class Wallet(models.Model):
     last_addition = models.DateTimeField()
 
 
-class WalletIncome(models.Model):
+class BalanceIncome(models.Model):
     """Serve para o registro de fluxo de caixa"""
     value = models.FloatField()
     national_fee = models.FloatField()  # IOF + Spread

@@ -13,7 +13,7 @@ class Migration(migrations.Migration):
 
     operations = [
         migrations.CreateModel(
-            name="IRBaseSettings",
+            name="Balance",
             fields=[
                 (
                     "id",
@@ -24,33 +24,13 @@ class Migration(migrations.Migration):
                         verbose_name="ID",
                     ),
                 ),
-                ("fee", models.FloatField()),
-                ("is_percentage", models.BooleanField()),
+                ("national_value", models.FloatField()),
+                ("foreign_value", models.FloatField()),
+                ("last_addition", models.DateTimeField()),
             ],
         ),
         migrations.CreateModel(
-            name="IRDividendSettings",
-            fields=[
-                (
-                    "irbasesettings_ptr",
-                    models.OneToOneField(
-                        auto_created=True,
-                        on_delete=django.db.models.deletion.CASCADE,
-                        parent_link=True,
-                        primary_key=True,
-                        serialize=False,
-                        to="gov.irbasesettings",
-                    ),
-                ),
-                (
-                    "fee_type",
-                    models.CharField(default="Provento", max_length=255),
-                ),
-            ],
-            bases=("gov.irbasesettings",),
-        ),
-        migrations.CreateModel(
-            name="IR",
+            name="BalanceIncome",
             fields=[
                 (
                     "id",
@@ -62,8 +42,11 @@ class Migration(migrations.Migration):
                     ),
                 ),
                 ("value", models.FloatField()),
-                ("paid", models.BooleanField()),
-                ("due_date", models.DateField()),
+                ("national_fee", models.FloatField()),
+                ("exchange_value", models.FloatField()),
+                ("foreign_fee", models.FloatField()),
+                ("is_dividend", models.BooleanField()),
+                ("is_foreign", models.BooleanField()),
                 (
                     "history",
                     models.ForeignKey(
