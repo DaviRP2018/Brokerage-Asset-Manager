@@ -22,33 +22,96 @@ class BrokerageAsset(models.Model):
         (OTHER, _("Other")),
     ]
 
-    date = models.DateField()
-    operation = models.CharField(max_length=20, choices=OPERATION_CHOICES)
-    asset = models.CharField(max_length=255)
-    quantity = models.DecimalField(max_digits=20, decimal_places=10)
-    price = models.DecimalField(max_digits=10, decimal_places=2)
-    costs = models.DecimalField(max_digits=10, decimal_places=2)
-    total_in_usd = models.DecimalField(max_digits=10, decimal_places=2)
-    origin_in_national_currency = models.CharField(max_length=255)
-    origin_in_foreign_currency = models.CharField(max_length=255)
+    date = models.DateField("Data")
+    operation = models.CharField(
+        "Operação", max_length=20, choices=OPERATION_CHOICES
+    )
+    asset = models.CharField(
+        "Ativo",
+        max_length=255,
+        null=True,
+        blank=True,
+    )
+    quantity = models.DecimalField(
+        "Quantidade",
+        max_digits=20,
+        decimal_places=10,
+        null=True,
+        blank=True,
+    )
+    price = models.DecimalField(
+        "Preço (US$)",
+        max_digits=10,
+        decimal_places=2,
+        null=True,
+        blank=True,
+    )
+    fees = models.DecimalField(
+        "Custos (R$)",
+        max_digits=10,
+        decimal_places=2,
+        null=True,
+        blank=True,
+    )
+    total = models.DecimalField("Total (US$)", max_digits=10, decimal_places=2)
+    origin_in_national_currency = models.CharField(
+        "Origem moeda nacional (US$)",
+        max_length=255,
+        null=True,
+        blank=True,
+    )
+    origin_in_foreign_currency = models.CharField(
+        "Origem moeda estrangeira (US$)",
+        max_length=255,
+        null=True,
+        blank=True,
+    )
     for_purchase_exchange_sell = models.DecimalField(
-        max_digits=10, decimal_places=2
+        "Para compra, câmbio de venda (R$)",
+        max_digits=10,
+        decimal_places=4,
+        null=True,
+        blank=True,
+    )
+    purchase_value = models.DecimalField(
+        "Valor da compra (R$)",
+        max_digits=10,
+        decimal_places=2,
+        null=True,
+        blank=True,
     )
     for_sale_exchange_purchase = models.DecimalField(
-        max_digits=10, decimal_places=2
+        "Para venda, câmbio de compra (R$)",
+        max_digits=10,
+        decimal_places=4,
+        null=True,
+        blank=True,
     )
-    profit_in_r = models.DecimalField(max_digits=10, decimal_places=2)
+    sell_value = models.DecimalField(
+        "Valor da venda (R$)",
+        max_digits=10,
+        decimal_places=2,
+        null=True,
+        blank=True,
+    )
+    profit = models.DecimalField(
+        "Lucro (R$)",
+        max_digits=10,
+        decimal_places=2,
+        null=True,
+        blank=True,
+    )
     balance_in_national_currency = models.DecimalField(
-        max_digits=10, decimal_places=2
+        "Saldo moeda nacional (US$)", max_digits=10, decimal_places=2
     )
     balance_in_foreign_currency = models.DecimalField(
-        max_digits=10, decimal_places=2
+        "Saldo moeda estrangeira (US$)", max_digits=10, decimal_places=2
     )
     total_balance_in_account = models.DecimalField(
-        max_digits=10, decimal_places=2
+        "Saldo em conta total (US$)", max_digits=10, decimal_places=2
     )
     percent_balance_in_foreign_currency = models.DecimalField(
-        max_digits=5, decimal_places=2
+        "% Saldo em conta moeda estrangeira", max_digits=5, decimal_places=2
     )
 
     def __str__(self):
