@@ -1,0 +1,35 @@
+div.form-row.field-price label,
+div.form-row.field-price input,
+div.form-row.field-total label,
+div.form-row.field-total input,
+div.form-row.field-origin_in_national_currency label,
+div.form-row.field-origin_in_national_currency input,
+div.form-row.field-origin_in_foreign_currency label,
+div.form-row.field-origin_in_foreign_currency input,
+div.form-row.field-balance_in_national_currency label,
+div.form-row.field-balance_in_national_currency input,
+div.form-row.field-balance_in_foreign_currency label,
+div.form-row.field-balance_in_foreign_currency input,
+div.form-row.field-total_balance_in_account label,
+div.form-row.field-total_balance_in_account input
+{
+    color: royalblue;
+    font-weight: bold;
+}
+
+div.form-row.field-fees label,
+div.form-row.field-fees input,
+div.form-row.field-for_purchase_exchange_sell label,
+div.form-row.field-for_purchase_exchange_sell input,
+div.form-row.field-purchase_value label,
+div.form-row.field-purchase_value input,
+div.form-row.field-for_sale_exchange_purchase label,
+div.form-row.field-for_sale_exchange_purchase input,
+div.form-row.field-sell_value label,
+div.form-row.field-sell_value input,
+div.form-row.field-profit label,
+div.form-row.field-profit input
+{
+    color: limegreen;
+    font-weight: bold;
+}

@@ -1,10 +1,10 @@
 {% extends "admin/change_form.html" %}
 {% load static %}
 
-{% block extrastyle %}{{ block.super }}
-  <link rel="stylesheet" href="{% static "admin/css/change_form.css" %}">
+{% block extrahead %}{{ block.super }}
+  <script src="{% static "admin/js/brokerage_add.js" %}" defer></script>
 {% endblock %}
 
-{% block extrahead %}{{ block.super }}
-  <script src="{% static "admin/js/change_form.js" %}" defer></script>
+{% block extrastyle %}{{ block.super }}
+  <link rel="stylesheet" href="{% static "admin/css/change_form.css" %}">
 {% endblock %}
