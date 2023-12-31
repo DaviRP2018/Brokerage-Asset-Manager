@@ -5,6 +5,7 @@ from django.utils.translation import gettext as _
 # Create your models here.
 class BrokerageAsset(models.Model):
     DEPOSIT = "Deposit"
+    WITHDRAW = "Withdraw"
     BUY = "Buy"
     SELL = "Sell"
     DIVIDEND = "Dividend"
@@ -14,6 +15,7 @@ class BrokerageAsset(models.Model):
 
     OPERATION_CHOICES = [
         (DEPOSIT, _("Deposit")),
+        (WITHDRAW, _("Withdraw")),
         (BUY, _("Buy")),
         (SELL, _("Sell")),
         (DIVIDEND, _("Dividend")),
