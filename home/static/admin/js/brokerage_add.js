@@ -2,32 +2,39 @@ $(document).ready(function () {
   function hideAll() {
     $("div.field-asset, div.field-quantity, div.field-price, div.field-fees, div.field-total, div.field-origin_in_national_currency, div.field-origin_in_foreign_currency, div.field-for_purchase_exchange_sell, div.field-purchase_value, div.field-for_sale_exchange_purchase, div.field-sell_value").hide();
     $(".brokerage-dynamic-field").hide();
+    $(".brokerage-dynamic-field").css("border-style", "none");
   }
-
-  function showDeposit() {
+  function manageDeposit() {
     $("div.field-fees, div.field-total, div.field-origin_in_national_currency, div.field-origin_in_foreign_currency, div.field-for_purchase_exchange_sell, div.field-purchase_value").show();
+    return "dodgerblue";
   }
-
-  function showWithdraw() {
+  function manageWithdraw() {
     $("div.field-fees, div.field-total, div.field-origin_in_national_currency, div.field-origin_in_foreign_currency, div.field-for_sale_exchange_purchase, div.field-sell_value").show();
+    return "olivedrab";
   }
-  function showBuy() {
+  function manageBuy() {
     $("div.field-asset, div.field-quantity, div.field-price, div.field-total, div.field-origin_in_national_currency, div.field-origin_in_foreign_currency, div.field-for_purchase_exchange_sell, div.field-purchase_value").show();
+    return "green";
   }
-  function showSell() {
+  function manageSell() {
     $("div.field-asset, div.field-quantity, div.field-price, div.field-total, div.field-origin_in_national_currency, div.field-origin_in_foreign_currency, div.field-for_sale_exchange_purchase, div.field-sell_value").show();
+    return "goldenrod";
   }
-  function showDividend() {
+  function manageDividend() {
     $("div.field-asset, div.field-total, div.field-origin_in_foreign_currency, div.field-for_sale_exchange_purchase, div.field-sell_value").show();
+    return "rebeccapurple";
   }
-  function showTax() {
+  function manageTax() {
     $("div.field-asset, div.field-total, div.field-origin_in_foreign_currency, div.field-for_sale_exchange_purchase, div.field-sell_value").show();
+    return "red";
   }
-  function showInterest() {
+  function manageInterest() {
     $("div.field-total, div.field-origin_in_foreign_currency").show();
+    return "gray";
   }
-  function showOther() {
+  function manageOther() {
     $("div.field-asset, div.field-quantity, div.field-price, div.field-fees, div.field-total, div.field-origin_in_national_currency, div.field-origin_in_foreign_currency, div.field-for_purchase_exchange_sell, div.field-purchase_value, div.field-for_sale_exchange_purchase, div.field-sell_value").show();
+    return "darkslategray";
   }
 
 
@@ -35,24 +42,28 @@ $(document).ready(function () {
     e.preventDefault();
 
     let selectedValue = $(this).val();
+    let borderColor = null;
 
     hideAll();
 
     $(".brokerage-dynamic-field h2").html(selectedValue);
     $(".brokerage-dynamic-field").show();
+    $(".brokerage-dynamic-field").css("border-style", "groove");
     switch (selectedValue) {
-      case "Deposit": showDeposit(); break;
-      case "Withdraw": showWithdraw(); break;
-      case "Buy": showBuy(); break;
-      case "Sell": showSell(); break;
-      case "Dividend": showDividend(); break;
-      case "Tax Paid": showTax(); break;
-      case "Interest": showInterest(); break;
-      case "Other": showOther(); break;
+      case "Deposit": borderColor = manageDeposit(); break;
+      case "Withdraw": borderColor = manageWithdraw(); break;
+      case "Buy": borderColor = manageBuy(); break;
+      case "Sell": borderColor = manageSell(); break;
+      case "Dividend": borderColor = manageDividend(); break;
+      case "Tax Paid": borderColor = manageTax(); break;
+      case "Interest": borderColor = manageInterest(); break;
+      case "Other": borderColor = manageOther(); break;
       default:
         $(".brokerage-dynamic-field").hide();
         break;
     }
+    $(".brokerage-dynamic-field h2").css("background", borderColor);
+    $(".brokerage-dynamic-field").css("border-color", borderColor);
   });
 
 
