@@ -42,10 +42,6 @@ INSTALLED_APPS = [
     "django.contrib.sessions",
     "django.contrib.messages",
     "django.contrib.staticfiles",
-    "balance.apps.BalanceConfig",
-    "stock.apps.StockConfig",
-    "history.apps.HistoryConfig",
-    "gov.apps.GovConfig",
     "home.apps.HomeConfig",
 ]
 

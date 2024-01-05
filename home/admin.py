@@ -10,19 +10,10 @@ class BrokerageAssetAdmin(admin.ModelAdmin):
     list_display = [
         "date",
         "operation",
-        "asset",
+        "symbol",
         "price",
-        "total_balance_in_account",
-        "percent_balance_in_foreign_currency",
     ]
-    search_fields = ["asset"]
-    readonly_fields = [
-        "profit",
-        "balance_in_national_currency",
-        "balance_in_foreign_currency",
-        "total_balance_in_account",
-        "percent_balance_in_foreign_currency",
-    ]
+    search_fields = ["symbol"]
     fieldsets = [
         (
             None,
@@ -35,7 +26,7 @@ class BrokerageAssetAdmin(admin.ModelAdmin):
             {
                 "classes": ["brokerage-dynamic-field"],
                 "fields": [
-                    ("asset", "quantity"),
+                    ("symbol", "quantity"),
                     "price",
                     "fees",
                     "total",

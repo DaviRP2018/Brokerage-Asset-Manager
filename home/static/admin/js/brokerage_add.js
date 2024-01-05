@@ -121,6 +121,8 @@ $(document).ready(function () {
       let value = parseFloat($(this).val());
       // Fill national valor
       $("div.field-origin_in_national_currency > input").val(stringfyFloatBR(value));
+      // Fill result
+      $("div.field-balance_in_national_currency > input").val(stringfyFloatBR(value));
     }
   });
 
