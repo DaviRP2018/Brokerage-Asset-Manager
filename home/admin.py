@@ -39,20 +39,6 @@ class BrokerageAssetAdmin(admin.ModelAdmin):
                 ],
             },
         ),
-        (
-            "Result",
-            {
-                "fields": [
-                    "profit",
-                    (
-                        "balance_in_national_currency",
-                        "balance_in_foreign_currency",
-                        "total_balance_in_account",
-                    ),
-                    "percent_balance_in_foreign_currency",
-                ]
-            },
-        ),
     ]
 
 

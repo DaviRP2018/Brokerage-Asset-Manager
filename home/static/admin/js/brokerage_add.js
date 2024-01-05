@@ -1,6 +1,6 @@
 $(document).ready(function () {
   function hideAll() {
-    $("div.field-asset, div.field-quantity, div.field-price, div.field-fees, div.field-total, div.field-origin_in_national_currency, div.field-origin_in_foreign_currency, div.field-for_purchase_exchange_sell, div.field-purchase_value, div.field-for_sale_exchange_purchase, div.field-sell_value").hide();
+    $("div.field-symbol, div.field-quantity, div.field-price, div.field-fees, div.field-total, div.field-origin_in_national_currency, div.field-origin_in_foreign_currency, div.field-for_purchase_exchange_sell, div.field-purchase_value, div.field-for_sale_exchange_purchase, div.field-sell_value").hide();
     $(".brokerage-dynamic-field").hide();
     $(".brokerage-dynamic-field").css("border-style", "none");
   }
@@ -13,19 +13,19 @@ $(document).ready(function () {
     return "olivedrab";
   }
   function manageBuy() {
-    $("div.field-asset, div.field-quantity, div.field-price, div.field-total, div.field-origin_in_national_currency, div.field-origin_in_foreign_currency, div.field-for_purchase_exchange_sell, div.field-purchase_value").show();
+    $("div.field-symbol, div.field-quantity, div.field-price, div.field-total, div.field-origin_in_national_currency, div.field-origin_in_foreign_currency, div.field-for_purchase_exchange_sell, div.field-purchase_value").show();
     return "green";
   }
   function manageSell() {
-    $("div.field-asset, div.field-quantity, div.field-price, div.field-total, div.field-origin_in_national_currency, div.field-origin_in_foreign_currency, div.field-for_sale_exchange_purchase, div.field-sell_value").show();
+    $("div.field-symbol, div.field-quantity, div.field-price, div.field-total, div.field-origin_in_national_currency, div.field-origin_in_foreign_currency, div.field-for_sale_exchange_purchase, div.field-sell_value").show();
     return "goldenrod";
   }
   function manageDividend() {
-    $("div.field-asset, div.field-total, div.field-origin_in_foreign_currency, div.field-for_sale_exchange_purchase, div.field-sell_value").show();
+    $("div.field-symbol, div.field-total, div.field-origin_in_foreign_currency, div.field-for_sale_exchange_purchase, div.field-sell_value").show();
     return "rebeccapurple";
   }
   function manageTax() {
-    $("div.field-asset, div.field-total, div.field-origin_in_foreign_currency, div.field-for_sale_exchange_purchase, div.field-sell_value").show();
+    $("div.field-symbol, div.field-total, div.field-origin_in_foreign_currency, div.field-for_sale_exchange_purchase, div.field-sell_value").show();
     return "red";
   }
   function manageInterest() {
@@ -33,7 +33,7 @@ $(document).ready(function () {
     return "gray";
   }
   function manageOther() {
-    $("div.field-asset, div.field-quantity, div.field-price, div.field-fees, div.field-total, div.field-origin_in_national_currency, div.field-origin_in_foreign_currency, div.field-for_purchase_exchange_sell, div.field-purchase_value, div.field-for_sale_exchange_purchase, div.field-sell_value").show();
+    $("div.field-symbol, div.field-quantity, div.field-price, div.field-fees, div.field-total, div.field-origin_in_national_currency, div.field-origin_in_foreign_currency, div.field-for_purchase_exchange_sell, div.field-purchase_value, div.field-for_sale_exchange_purchase, div.field-sell_value").show();
     return "darkslategray";
   }
 
@@ -54,11 +54,7 @@ $(document).ready(function () {
 
 
   function clearAll() {
-    $("div.field-asset input, div.field-quantity input, div.field-price input, div.field-fees input, div.field-total input, div.field-origin_in_national_currency input, div.field-origin_in_foreign_currency input, div.field-for_purchase_exchange_sell input, div.field-purchase_value input, div.field-for_sale_exchange_purchase input, div.field-sell_value input").val(null);
-  }
-
-  function stringfyFloatBR(num) {
-    return num.toLocaleString('pt-BR')
+    $("div.field-symbol input, div.field-quantity input, div.field-price input, div.field-fees input, div.field-total input, div.field-origin_in_national_currency input, div.field-origin_in_foreign_currency input, div.field-for_purchase_exchange_sell input, div.field-purchase_value input, div.field-for_sale_exchange_purchase input, div.field-sell_value input").val(null);
   }
 
 
@@ -99,7 +95,7 @@ $(document).ready(function () {
     let feesValue = parseFloat($("div.field-fees input").val());
     let totalValue = parseFloat($("div.field-total input").val());
     let result = ((value * totalValue) + feesValue).toFixed(2);
-    $("div.field-purchase_value > input").val(stringfyFloatBR(result));
+    $("div.field-purchase_value > input").val(result);
   });
 
   $("div.field-for_sale_exchange_purchase > input").change(function (e) {
@@ -108,7 +104,7 @@ $(document).ready(function () {
     let feesValue = parseFloat($("div.field-fees input").val());
     let totalValue = parseFloat($("div.field-total input").val());
     let result = ((value * totalValue) + feesValue).toFixed(2);
-    $("div.field-sell_value > input").val(stringfyFloatBR(result));
+    $("div.field-sell_value > input").val(result);
   });
   // ============================ Exchange auto complete END ============================
 
@@ -120,9 +116,7 @@ $(document).ready(function () {
     if (selectedValue === "Deposit") {
       let value = parseFloat($(this).val());
       // Fill national valor
-      $("div.field-origin_in_national_currency > input").val(stringfyFloatBR(value));
-      // Fill result
-      $("div.field-balance_in_national_currency > input").val(stringfyFloatBR(value));
+      $("div.field-origin_in_national_currency > input").val(value);
     }
   });
 
