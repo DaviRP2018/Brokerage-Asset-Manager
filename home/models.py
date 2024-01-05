@@ -9,7 +9,8 @@ class BrokerageAsset(models.Model):
     BUY = "Buy"
     SELL = "Sell"
     DIVIDEND = "Dividend"
-    TAX_PAID = "Tax Paid"
+    # TODO: Make tax be a editable setting
+    # TAX_PAID = "Tax Paid"
     INTEREST = "Interest"
     OTHER = "Other"
 
@@ -19,7 +20,7 @@ class BrokerageAsset(models.Model):
         (BUY, _("Buy")),
         (SELL, _("Sell")),
         (DIVIDEND, _("Dividend")),
-        (TAX_PAID, _("Tax Paid")),
+        # (TAX_PAID, _("Tax Paid")),
         (INTEREST, _("Interest")),
         (OTHER, _("Other")),
     ]

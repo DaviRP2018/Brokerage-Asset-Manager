@@ -3,7 +3,7 @@ WITHDRAW = "Withdraw";
 BUY = "Buy";
 SELL = "Sell";
 DIVIDEND = "Dividend";
-TAX_PAID = "Tax Paid";
+// TAX_PAID = "Tax Paid";
 INTEREST = "Interest";
 OTHER = "Other";
 
@@ -30,15 +30,15 @@ $(document).ready(function () {
     return "goldenrod";
   }
   function manageDividend() {
-    $("div.field-symbol, div.field-total, div.field-origin_in_foreign_currency, div.field-for_sale_exchange_purchase, div.field-sell_value").show();
+    $("div.field-symbol, div.field-total, div.field-for_sale_exchange_purchase, div.field-sell_value").show();
     return "rebeccapurple";
   }
-  function manageTax() {
-    $("div.field-symbol, div.field-total, div.field-origin_in_foreign_currency, div.field-for_sale_exchange_purchase, div.field-sell_value").show();
-    return "red";
-  }
+  // function manageTax() {
+  //   $("div.field-symbol, div.field-total, div.field-origin_in_foreign_currency, div.field-for_sale_exchange_purchase, div.field-sell_value").show();
+  //   return "red";
+  // }
   function manageInterest() {
-    $("div.field-total, div.field-origin_in_foreign_currency").show();
+    $("div.field-total").show();
     return "gray";
   }
   function manageOther() {
@@ -53,11 +53,15 @@ $(document).ready(function () {
       '<a class="fst-italic" href="https://www.bcb.gov.br/estabilidadefinanceira/historicocotacoes" target="_blank" rel="noopener noreferrer">Pra compra, ver o valor do dólar no dia pelo site do banco central</a>'
     );
     $("div.field-for_sale_exchange_purchase.field-sell_value").append(
-      '<a class="fst-italic" href="https://www.bcb.gov.br/estabilidadefinanceira/historicocotacoes" target="_blank" rel="noopener noreferrer">Pra proventos, cotação deve ser o valor do último dia útil da primeira quinzena do mês anterior</a>'
+      '<a class="fst-italic" href="https://www.bcb.gov.br/estabilidadefinanceira/historicocotacoes" target="_blank" rel="noopener noreferrer">Pra dividendos, cotação deve ser o valor do último dia útil da primeira quinzena do mês anterior</a>'
     );
 
     $("div.field-profit").append(
       '<span class="fst-italic">Lucros isentos e não tributáveis, se abaixo de R$35.000,00</span>'
+    );
+
+    $("div.field-total").append(
+      '<span class="fst-italic">Pra dividendos, será salvo automaticamente uma entrada de taxa de 30% sobre o valor</span>'
     );
   }
 
@@ -85,7 +89,7 @@ $(document).ready(function () {
       case BUY: borderColor = manageBuy(); break;
       case SELL: borderColor = manageSell(); break;
       case DIVIDEND: borderColor = manageDividend(); break;
-      case TAX_PAID: borderColor = manageTax(); break;
+      // case TAX_PAID: borderColor = manageTax(); break;
       case INTEREST: borderColor = manageInterest(); break;
       case OTHER: borderColor = manageOther(); break;
       default:
@@ -129,11 +133,6 @@ $(document).ready(function () {
       let totalValue = parseFloat($(this).val());
       // Fill national value
       $("div.field-origin_in_national_currency > input").val(totalValue);
-    }
-    if (selectedValue === INTEREST) {
-      let totalValue = parseFloat($(this).val());
-      // Fill foreign value
-      $("div.field-origin_in_foreign_currency > input").val(totalValue);
     }
   });
 
