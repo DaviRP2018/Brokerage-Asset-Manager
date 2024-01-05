@@ -1,3 +1,12 @@
+DEPOSIT = "Deposit";
+WITHDRAW = "Withdraw";
+BUY = "Buy";
+SELL = "Sell";
+DIVIDEND = "Dividend";
+TAX_PAID = "Tax Paid";
+INTEREST = "Interest";
+OTHER = "Other";
+
 $(document).ready(function () {
   function hideAll() {
     $("div.field-symbol, div.field-quantity, div.field-price, div.field-fees, div.field-total, div.field-origin_in_national_currency, div.field-origin_in_foreign_currency, div.field-for_purchase_exchange_sell, div.field-purchase_value, div.field-for_sale_exchange_purchase, div.field-sell_value").hide();
@@ -13,11 +22,11 @@ $(document).ready(function () {
     return "olivedrab";
   }
   function manageBuy() {
-    $("div.field-symbol, div.field-quantity, div.field-price, div.field-total, div.field-origin_in_national_currency, div.field-origin_in_foreign_currency, div.field-for_purchase_exchange_sell, div.field-purchase_value").show();
+    $("div.field-symbol, div.field-quantity, div.field-price, div.field-total, div.field-for_purchase_exchange_sell, div.field-purchase_value").show();
     return "green";
   }
   function manageSell() {
-    $("div.field-symbol, div.field-quantity, div.field-price, div.field-total, div.field-origin_in_national_currency, div.field-origin_in_foreign_currency, div.field-for_sale_exchange_purchase, div.field-sell_value").show();
+    $("div.field-symbol, div.field-quantity, div.field-price, div.field-total, div.field-for_sale_exchange_purchase, div.field-sell_value").show();
     return "goldenrod";
   }
   function manageDividend() {
@@ -71,14 +80,14 @@ $(document).ready(function () {
     $(".brokerage-dynamic-field").show();
     $(".brokerage-dynamic-field").css("border-style", "groove");
     switch (selectedValue) {
-      case "Deposit": borderColor = manageDeposit(); break;
-      case "Withdraw": borderColor = manageWithdraw(); break;
-      case "Buy": borderColor = manageBuy(); break;
-      case "Sell": borderColor = manageSell(); break;
-      case "Dividend": borderColor = manageDividend(); break;
-      case "Tax Paid": borderColor = manageTax(); break;
-      case "Interest": borderColor = manageInterest(); break;
-      case "Other": borderColor = manageOther(); break;
+      case DEPOSIT: borderColor = manageDeposit(); break;
+      case WITHDRAW: borderColor = manageWithdraw(); break;
+      case BUY: borderColor = manageBuy(); break;
+      case SELL: borderColor = manageSell(); break;
+      case DIVIDEND: borderColor = manageDividend(); break;
+      case TAX_PAID: borderColor = manageTax(); break;
+      case INTEREST: borderColor = manageInterest(); break;
+      case OTHER: borderColor = manageOther(); break;
       default:
         $(".brokerage-dynamic-field").hide();
         break;
@@ -88,23 +97,26 @@ $(document).ready(function () {
   });
 
 
+  function mathExchange(exchange) {
+    let feesValueField = parseFloat($("div.field-fees input").val());
+    let feesValue = isNaN(feesValueField) ? 0 : feesValueField;
+    let totalValue = parseFloat($("div.field-total input").val());
+    let result = ((exchange * totalValue) + feesValue).toFixed(2);
+    return result;
+  }
+
+
   // ============================ Exchange auto complete START ============================
   $("div.field-for_purchase_exchange_sell > input").change(function (e) {
     e.preventDefault();
-    let value = parseFloat($(this).val());
-    let feesValue = parseFloat($("div.field-fees input").val());
-    let totalValue = parseFloat($("div.field-total input").val());
-    let result = ((value * totalValue) + feesValue).toFixed(2);
-    $("div.field-purchase_value > input").val(result);
+    let exchangeSell = parseFloat($(this).val());
+    $("div.field-purchase_value > input").val(mathExchange(exchangeSell));
   });
 
   $("div.field-for_sale_exchange_purchase > input").change(function (e) {
     e.preventDefault();
-    let value = parseFloat($(this).val());
-    let feesValue = parseFloat($("div.field-fees input").val());
-    let totalValue = parseFloat($("div.field-total input").val());
-    let result = ((value * totalValue) + feesValue).toFixed(2);
-    $("div.field-sell_value > input").val(result);
+    let exchangeBuy = parseFloat($(this).val());
+    $("div.field-sell_value > input").val(mathExchange(exchangeBuy));
   });
   // ============================ Exchange auto complete END ============================
 
@@ -113,13 +125,58 @@ $(document).ready(function () {
     e.preventDefault();
     let selectedValue = $("#id_operation").val();
     // Deposit logic
-    if (selectedValue === "Deposit") {
-      let value = parseFloat($(this).val());
-      // Fill national valor
-      $("div.field-origin_in_national_currency > input").val(value);
+    if (selectedValue === DEPOSIT) {
+      let totalValue = parseFloat($(this).val());
+      // Fill national value
+      $("div.field-origin_in_national_currency > input").val(totalValue);
+    }
+    if (selectedValue === INTEREST) {
+      let totalValue = parseFloat($(this).val());
+      // Fill foreign value
+      $("div.field-origin_in_foreign_currency > input").val(totalValue);
     }
   });
 
+  $("div.field-quantity > input").change(function (e) {
+    e.preventDefault();
+    let selectedValue = $("#id_operation").val();
+    // Buy logic
+    if (selectedValue === BUY) {
+      let price = parseFloat($("div.field-price input").val());
+      let quantity = parseFloat($(this).val());
+      let totalValue = price * quantity;
+      console.log(price);
+      console.log(quantity);
+      console.log(totalValue);
+      // Fill total value
+      $("div.field-total input").val(totalValue);
+    }
+  });
+
+  $("div.field-price input").change(function (e) {
+    e.preventDefault();
+    let selectedValue = $("#id_operation").val();
+    // Buy logic
+    if (selectedValue === BUY) {
+      let price = parseFloat($(this).val());
+      let quantity = parseFloat($("div.field-quantity > input").val());
+      let totalValue = price * quantity;
+      console.log(price);
+      console.log(quantity);
+      console.log(totalValue);
+      // Fill total value
+      $("div.field-total input").val(totalValue);
+    }
+  });
+
+
+  // disable mousewheel on a input number field when in focus
+  // (to prevent Chromium browsers change the value when scrolling)
+  $("form").on("focus", "input[type=number]", function (e) {
+    $(this).on("wheel.disableScroll", function (e) {
+      e.preventDefault()
+    })
+  })
 
   hideAll();
   appendNotes();
