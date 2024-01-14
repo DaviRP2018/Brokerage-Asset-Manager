@@ -220,7 +220,7 @@ $(document).ready(function () {
     e.preventDefault();
     let selectedValue = $("#id_operation").val();
     // Buy logic
-    if (selectedValue === BUY) {
+    if (selectedValue === BUY || selectedValue === SELL) {
       let price = parseFloat($(this).val());
       let quantity = parseFloat($("div.field-quantity > input").val());
       let totalValue = price * quantity;

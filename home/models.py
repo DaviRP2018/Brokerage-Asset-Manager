@@ -138,24 +138,22 @@ class BrokerageAsset(BrokerageAbstract):
         ]:
             # Ensure it's a positive increment
             self.total = abs(self.total)
-            self.quantity = abs(self.quantity) if self.quantity else 0
+            self.quantity = -abs(self.quantity) if self.quantity else 0
             self.origin_in_national_currency = abs(national) if national else 0
             self.origin_in_foreign_currency = abs(foreign) if foreign else 0
         elif self.operation in [self.WITHDRAW, self.BUY]:
             # Ensure it's a negative increment
             self.total = -abs(self.total)
-            self.quantity = -abs(self.quantity) if self.quantity else 0
+            self.quantity = abs(self.quantity) if self.quantity else 0
             self.origin_in_national_currency = (
                 -abs(national) if national else 0
             )
             self.origin_in_foreign_currency = -abs(foreign) if foreign else 0
-            if self.operation == self.WITHDRAW:
-                acc_balance = AccountCashBalance.objects.first()
-                acc_percent = acc_balance.percent_balance_in_foreign_currency
-                self.origin_in_foreign_currency = acc_percent * self.total
-                self.origin_in_national_currency = (
-                    1 - acc_percent
-                ) * self.total
+            # Percentage
+            acc_balance = AccountCashBalance.objects.first()
+            acc_percent = acc_balance.percent_balance_in_foreign_currency
+            self.origin_in_foreign_currency = acc_percent * self.total
+            self.origin_in_national_currency = (1 - acc_percent) * self.total
         return super().save(*args, **kwargs)
 
 
@@ -203,10 +201,12 @@ def _handle_brokerage_models(sender, **kwargs):
         orders = Order.objects.filter(symbol=instance.symbol)
         try:
             position = Positions.objects.get(symbol=instance.symbol)
-            position.total_quantity = orders.aggregate(Sum("quantity"))
+            position.total_quantity = orders.aggregate(Sum("quantity"))[
+                "quantity__sum"
+            ]
             position.average_value = orders.aggregate(
-                Avg(Case(When(quantity__gt=0, then=F("value"))))
-            )
+                value__avg=Avg(Case(When(quantity__gt=0, then=F("value"))))
+            )["value__avg"]
             position.save()
         except ObjectDoesNotExist:
             Positions(

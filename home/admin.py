@@ -11,6 +11,7 @@ class BrokerageAssetAdmin(admin.ModelAdmin):
         "date",
         "operation",
         "symbol",
+        "quantity",
         "price",
         "total",
     ]
