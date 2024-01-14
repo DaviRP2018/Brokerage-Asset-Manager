@@ -1,5 +1,3 @@
-from collections.abc import Iterable
-
 from django.db import models
 
 
@@ -91,15 +89,9 @@ class AccountCashBalance(models.Model):
         "% Saldo em conta moeda estrangeira", max_digits=5, decimal_places=2
     )
 
-    def save(
-        self,
-        force_insert: bool = ...,
-        force_update: bool = ...,
-        using: str | None = ...,
-        update_fields: Iterable[str] | None = ...,
-    ) -> None:
+    def save(self, *args, **kwargs):
         # One account to rule them all
         # For now I will be coding for only one account, to minimize complexity
         if self.__class__.objects.count():
             self.pk = self.__class__.objects.first().pk
-        return super().save(force_insert, force_update, using, update_fields)
+        return super().save(*args, **kwargs)

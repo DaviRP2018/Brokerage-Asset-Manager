@@ -198,6 +198,7 @@ $(document).ready(function () {
       let totalValue = parseFloat($(this).val());
       // Fill national value
       $("div.field-origin_in_national_currency > input").val(totalValue);
+      $("div.field-origin_in_foreign_currency > input").val(0);
     }
   });
 
