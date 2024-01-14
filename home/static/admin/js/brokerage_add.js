@@ -9,28 +9,67 @@ OTHER = "Other";
 
 $(document).ready(function () {
   function hideAll() {
-    $("div.field-symbol, div.field-quantity, div.field-price, div.field-fees, div.field-total, div.field-origin_in_national_currency, div.field-origin_in_foreign_currency, div.field-for_purchase_exchange_sell, div.field-purchase_value, div.field-for_sale_exchange_purchase, div.field-sell_value").hide();
+    $("div.field-symbol, \
+      div.field-quantity, \
+      div.field-price, \
+      div.field-fees, \
+      div.field-total, \
+      div.field-origin_in_national_currency, \
+      div.field-origin_in_foreign_currency, \
+      div.field-for_purchase_exchange_sell, \
+      div.field-purchase_value, \
+      div.field-for_sale_exchange_purchase, \
+      div.field-sell_value"
+    ).hide();
     $(".brokerage-dynamic-field").hide();
     $(".brokerage-dynamic-field").css("border-style", "none");
   }
   function manageDeposit() {
-    $("div.field-fees, div.field-total, div.field-origin_in_national_currency, div.field-origin_in_foreign_currency, div.field-for_purchase_exchange_sell, div.field-purchase_value").show();
+    $("div.field-fees, \
+      div.field-total, \
+      div.field-origin_in_national_currency, \
+      div.field-origin_in_foreign_currency, \
+      div.field-for_purchase_exchange_sell, \
+      div.field-purchase_value"
+    ).show();
     return "dodgerblue";
   }
   function manageWithdraw() {
-    $("div.field-fees, div.field-total, div.field-origin_in_national_currency, div.field-origin_in_foreign_currency, div.field-for_sale_exchange_purchase, div.field-sell_value").show();
+    $("div.field-fees, \
+      div.field-total, \
+      div.field-origin_in_national_currency, \
+      div.field-origin_in_foreign_currency, \
+      div.field-for_sale_exchange_purchase, \
+      div.field-sell_value"
+    ).show();
     return "olivedrab";
   }
   function manageBuy() {
-    $("div.field-symbol, div.field-quantity, div.field-price, div.field-total, div.field-for_purchase_exchange_sell, div.field-purchase_value").show();
+    $("div.field-symbol, \
+      div.field-quantity, \
+      div.field-price, \
+      div.field-total, \
+      div.field-for_purchase_exchange_sell, \
+      div.field-purchase_value"
+    ).show();
     return "green";
   }
   function manageSell() {
-    $("div.field-symbol, div.field-quantity, div.field-price, div.field-total, div.field-for_sale_exchange_purchase, div.field-sell_value").show();
+    $("div.field-symbol, \
+      div.field-quantity, \
+      div.field-price, \
+      div.field-total, \
+      div.field-for_sale_exchange_purchase, \
+      div.field-sell_value"
+    ).show();
     return "goldenrod";
   }
   function manageDividend() {
-    $("div.field-symbol, div.field-total, div.field-for_sale_exchange_purchase, div.field-sell_value").show();
+    $("div.field-symbol, \
+      div.field-total, \
+      div.field-for_sale_exchange_purchase, \
+      div.field-sell_value"
+    ).show();
     return "rebeccapurple";
   }
   // function manageTax() {
@@ -42,7 +81,18 @@ $(document).ready(function () {
     return "gray";
   }
   function manageOther() {
-    $("div.field-symbol, div.field-quantity, div.field-price, div.field-fees, div.field-total, div.field-origin_in_national_currency, div.field-origin_in_foreign_currency, div.field-for_purchase_exchange_sell, div.field-purchase_value, div.field-for_sale_exchange_purchase, div.field-sell_value").show();
+    $("div.field-symbol, \
+      div.field-quantity, \
+      div.field-price, \
+      div.field-fees, \
+      div.field-total, \
+      div.field-origin_in_national_currency, \
+      div.field-origin_in_foreign_currency, \
+      div.field-for_purchase_exchange_sell, \
+      div.field-purchase_value, \
+      div.field-for_sale_exchange_purchase, \
+      div.field-sell_value"
+    ).show();
     return "darkslategray";
   }
 
@@ -50,10 +100,14 @@ $(document).ready(function () {
   function appendNotes() {
     // TODO: put a setting to modify link as user
     $("div.field-for_purchase_exchange_sell.field-purchase_value").append(
-      '<a class="fst-italic" href="https://www.bcb.gov.br/estabilidadefinanceira/historicocotacoes" target="_blank" rel="noopener noreferrer">Pra compra, ver o valor do dólar no dia pelo site do banco central</a>'
+      '<a class="fst-italic" href="https://www.bcb.gov.br/estabilidadefinanceira/historicocotacoes" \
+      target="_blank" rel="noopener noreferrer">\
+      Pra compra, ver o valor do dólar no dia pelo site do banco central</a>'
     );
     $("div.field-for_sale_exchange_purchase.field-sell_value").append(
-      '<a class="fst-italic" href="https://www.bcb.gov.br/estabilidadefinanceira/historicocotacoes" target="_blank" rel="noopener noreferrer">Pra dividendos, cotação deve ser o valor do último dia útil da primeira quinzena do mês anterior</a>'
+      '<a class="fst-italic" href="https://www.bcb.gov.br/estabilidadefinanceira/historicocotacoes" \
+      target="_blank" rel="noopener noreferrer">\
+      Pra dividendos, cotação deve ser o valor do último dia útil da primeira quinzena do mês anterior</a>'
     );
 
     $("div.field-profit").append(
@@ -67,7 +121,18 @@ $(document).ready(function () {
 
 
   function clearAll() {
-    $("div.field-symbol input, div.field-quantity input, div.field-price input, div.field-fees input, div.field-total input, div.field-origin_in_national_currency input, div.field-origin_in_foreign_currency input, div.field-for_purchase_exchange_sell input, div.field-purchase_value input, div.field-for_sale_exchange_purchase input, div.field-sell_value input").val(null);
+    $("div.field-symbol input, \
+      div.field-quantity input, \
+      div.field-price input, \
+      div.field-fees input, \
+      div.field-total input, \
+      div.field-origin_in_national_currency input, \
+      div.field-origin_in_foreign_currency input, \
+      div.field-for_purchase_exchange_sell input, \
+      div.field-purchase_value input, \
+      div.field-for_sale_exchange_purchase input, \
+      div.field-sell_value input"
+    ).val(null);
   }
 
 

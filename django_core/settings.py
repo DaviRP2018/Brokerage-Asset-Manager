@@ -42,6 +42,7 @@ INSTALLED_APPS = [
     "django.contrib.staticfiles",
     "home.apps.HomeConfig",
     "positions.apps.PositionsConfig",
+    "history.apps.HistoryConfig",
 ]
 
 MIDDLEWARE = [
