@@ -37,8 +37,6 @@ $(document).ready(function () {
   function manageWithdraw() {
     $("div.field-fees, \
       div.field-total, \
-      div.field-origin_in_national_currency, \
-      div.field-origin_in_foreign_currency, \
       div.field-for_sale_exchange_purchase, \
       div.field-sell_value"
     ).show();

@@ -1,10 +1,10 @@
 from django.db import models
 
-from home.models import BrokerageAsset
+from home.models import BrokerageAbstract
 
 
 # Create your models here.
-class BrokerageHistory(BrokerageAsset):
+class BrokerageHistory(BrokerageAbstract):
     total_balance_in_account = models.DecimalField(
         "Saldo em conta total (US$)", max_digits=10, decimal_places=2
     )

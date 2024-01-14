@@ -12,6 +12,7 @@ class BrokerageAssetAdmin(admin.ModelAdmin):
         "operation",
         "symbol",
         "price",
+        "total",
     ]
     search_fields = ["symbol"]
     fieldsets = [

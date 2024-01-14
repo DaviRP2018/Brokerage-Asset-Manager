@@ -10,7 +10,7 @@ from positions.models import AccountCashBalance, Order, Positions
 
 
 # Create your models here.
-class BrokerageAsset(models.Model):
+class BrokerageAbstract(models.Model):
     DEPOSIT = "Deposit"
     WITHDRAW = "Withdraw"
     BUY = "Buy"
@@ -119,6 +119,14 @@ class BrokerageAsset(models.Model):
         null=True,
     )
 
+    class Meta:
+        abstract = True
+
+    def __str__(self):
+        return f"{self.date} - {self.symbol}"
+
+
+class BrokerageAsset(BrokerageAbstract):
     def save(self, *args, **kwargs):
         national = self.origin_in_national_currency
         foreign = self.origin_in_foreign_currency
@@ -131,22 +139,28 @@ class BrokerageAsset(models.Model):
             # Ensure it's a positive increment
             self.total = abs(self.total)
             self.quantity = abs(self.quantity) if self.quantity else 0
-            self.national = abs(national) if national else 0
-            self.foreign = abs(foreign) if foreign else 0
+            self.origin_in_national_currency = abs(national) if national else 0
+            self.origin_in_foreign_currency = abs(foreign) if foreign else 0
         elif self.operation in [self.WITHDRAW, self.BUY]:
             # Ensure it's a negative increment
             self.total = -abs(self.total)
             self.quantity = -abs(self.quantity) if self.quantity else 0
-            self.national = -abs(national) if national else 0
-            self.foreign = -abs(foreign) if foreign else 0
+            self.origin_in_national_currency = (
+                -abs(national) if national else 0
+            )
+            self.origin_in_foreign_currency = -abs(foreign) if foreign else 0
+            if self.operation == self.WITHDRAW:
+                acc_balance = AccountCashBalance.objects.first()
+                acc_percent = acc_balance.percent_balance_in_foreign_currency
+                self.origin_in_foreign_currency = acc_percent * self.total
+                self.origin_in_national_currency = (
+                    1 - acc_percent
+                ) * self.total
         return super().save(*args, **kwargs)
-
-    def __str__(self):
-        return f"{self.date} - {self.symbol}"
 
 
 @receiver(models.signals.post_save, sender=BrokerageAsset)
-def _handle_brokerage_models(sender: BrokerageAsset, **kwargs):
+def _handle_brokerage_models(sender, **kwargs):
     instance = kwargs["instance"]
     logger = logging.getLogger("_handle_brokerage_models")
     # Dividend
@@ -156,26 +170,26 @@ def _handle_brokerage_models(sender: BrokerageAsset, **kwargs):
         foreign_currency *= 0.70
 
     # Account balance
-    account_cash_balance = AccountCashBalance.objects.first()
-    account_cash_balance.balance_in_national_currency = (
-        account_cash_balance.balance_in_national_currency
+    acc_balance = AccountCashBalance.objects.first()
+    acc_balance.balance_in_national_currency = (
+        acc_balance.balance_in_national_currency
         + instance.origin_in_national_currency
     )
-    account_cash_balance.balance_in_foreign_currency = (
-        account_cash_balance.balance_in_foreign_currency + foreign_currency
+    acc_balance.balance_in_foreign_currency = (
+        acc_balance.balance_in_foreign_currency + foreign_currency
     )
-    account_cash_balance.total_balance_in_account = (
-        account_cash_balance.total_balance_in_account + instance.total
+    acc_balance.total_balance_in_account = (
+        acc_balance.total_balance_in_account + instance.total
     )
-    account_cash_balance.percent_balance_in_foreign_currency = (
+    acc_balance.percent_balance_in_foreign_currency = (
         (
-            account_cash_balance.balance_in_foreign_currency
-            / account_cash_balance.total_balance_in_account
+            acc_balance.balance_in_foreign_currency
+            / acc_balance.total_balance_in_account
         )
-        if account_cash_balance.total_balance_in_account
+        if acc_balance.total_balance_in_account
         else 0.00
     )
-    account_cash_balance.save()
+    acc_balance.save()
 
     # Order
     if instance.operation in [instance.BUY, instance.SELL]:
@@ -219,8 +233,8 @@ def _handle_brokerage_models(sender: BrokerageAsset, **kwargs):
         purchase_value=instance.purchase_value,
         for_sale_exchange_purchase=instance.for_sale_exchange_purchase,
         sell_value=instance.sell_value,
-        balance_in_national_currency=account_cash_balance.balance_in_national_currency,  # noqa
-        balance_in_foreign_currency=account_cash_balance.balance_in_foreign_currency,  # noqa
-        total_balance_in_account=account_cash_balance.total_balance_in_account,
-        percent_balance_in_foreign_currency=account_cash_balance.percent_balance_in_foreign_currency,  # noqa
+        balance_in_national_currency=acc_balance.balance_in_national_currency,  # noqa
+        balance_in_foreign_currency=acc_balance.balance_in_foreign_currency,  # noqa
+        total_balance_in_account=acc_balance.total_balance_in_account,
+        percent_balance_in_foreign_currency=acc_balance.percent_balance_in_foreign_currency,  # noqa
     ).save()
