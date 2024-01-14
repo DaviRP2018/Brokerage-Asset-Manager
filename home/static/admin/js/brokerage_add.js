@@ -198,6 +198,15 @@ $(document).ready(function () {
       $("div.field-origin_in_national_currency > input").val(totalValue);
       $("div.field-origin_in_foreign_currency > input").val(0);
     }
+    if ([DEPOSIT, BUY].includes(selectedValue)) {
+      // Exchange logic
+      let exchangeSell = parseFloat($("div.field-for_purchase_exchange_sell > input").val());
+      $("div.field-purchase_value > input").val(mathExchange(exchangeSell));
+    } else if ([WITHDRAW, SELL, DIVIDEND].includes(selectedValue)) {
+      // Exchange logic
+      let exchangeSell = parseFloat($("div.field-for_sale_exchange_purchase > input").val());
+      $("div.field-sell_value > input").val(mathExchange(exchangeSell));
+    }
   });
 
   $("div.field-quantity > input").change(function (e) {

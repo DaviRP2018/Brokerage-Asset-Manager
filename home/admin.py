@@ -13,6 +13,8 @@ class BrokerageAssetAdmin(admin.ModelAdmin):
         "symbol",
         "quantity",
         "price",
+        "origin_in_national_currency",
+        "origin_in_foreign_currency",
         "total",
     ]
     search_fields = ["symbol"]

@@ -1,3 +1,4 @@
+import decimal
 import logging
 
 from django.core.exceptions import ObjectDoesNotExist
@@ -7,6 +8,9 @@ from django.dispatch import receiver
 from django.utils.translation import gettext as _
 
 from positions.models import AccountCashBalance, Order, Positions
+
+
+DIVIDEND_TAX = 0.30
 
 
 # Create your models here.
@@ -139,8 +143,21 @@ class BrokerageAsset(BrokerageAbstract):
             # Ensure it's a positive increment
             self.total = abs(self.total)
             self.quantity = -abs(self.quantity) if self.quantity else 0
-            self.origin_in_national_currency = abs(national) if national else 0
-            self.origin_in_foreign_currency = abs(foreign) if foreign else 0
+            if self.operation == self.SELL:
+                # Percentage
+                acc_balance = AccountCashBalance.objects.first()
+                acc_percent = acc_balance.percent_balance_in_foreign_currency
+                self.origin_in_foreign_currency = acc_percent * self.total
+                self.origin_in_national_currency = (
+                    1 - acc_percent
+                ) * self.total
+            else:
+                self.origin_in_national_currency = (
+                    abs(national) if national else 0
+                )
+                self.origin_in_foreign_currency = (
+                    abs(foreign) if foreign else 0
+                )
         elif self.operation in [self.WITHDRAW, self.BUY]:
             # Ensure it's a negative increment
             self.total = -abs(self.total)
@@ -161,11 +178,15 @@ class BrokerageAsset(BrokerageAbstract):
 def _handle_brokerage_models(sender, **kwargs):
     instance = kwargs["instance"]
     logger = logging.getLogger("_handle_brokerage_models")
+
     # Dividend
     foreign_currency = instance.origin_in_foreign_currency
+    total = instance.total
     logger.debug("foreign_currency: %s", foreign_currency)
+
     if instance.operation == instance.DIVIDEND:
-        foreign_currency *= 0.70
+        foreign_currency *= 1 - DIVIDEND_TAX
+        total *= 1 - DIVIDEND_TAX
 
     # Account balance
     acc_balance = AccountCashBalance.objects.first()
@@ -174,10 +195,11 @@ def _handle_brokerage_models(sender, **kwargs):
         + instance.origin_in_national_currency
     )
     acc_balance.balance_in_foreign_currency = (
-        acc_balance.balance_in_foreign_currency + foreign_currency
+        acc_balance.balance_in_foreign_currency
+        + decimal.Decimal(foreign_currency)
     )
     acc_balance.total_balance_in_account = (
-        acc_balance.total_balance_in_account + instance.total
+        acc_balance.total_balance_in_account + decimal.Decimal(total)
     )
     acc_balance.percent_balance_in_foreign_currency = (
         (
@@ -226,7 +248,7 @@ def _handle_brokerage_models(sender, **kwargs):
         quantity=instance.quantity,
         price=instance.price,
         fees=instance.fees,
-        total=instance.total,
+        total=total,
         origin_in_national_currency=instance.origin_in_national_currency,
         origin_in_foreign_currency=instance.origin_in_foreign_currency,
         for_purchase_exchange_sell=instance.for_purchase_exchange_sell,
@@ -238,3 +260,23 @@ def _handle_brokerage_models(sender, **kwargs):
         total_balance_in_account=acc_balance.total_balance_in_account,
         percent_balance_in_foreign_currency=acc_balance.percent_balance_in_foreign_currency,  # noqa
     ).save()
+    if instance.operation == instance.DIVIDEND:
+        BrokerageHistory(
+            date=instance.date,
+            operation=instance.TAX_PAID,
+            symbol=instance.symbol,
+            quantity=instance.quantity,
+            price=instance.price,
+            fees=instance.fees,
+            total=instance.total * DIVIDEND_TAX,
+            origin_in_national_currency=instance.origin_in_national_currency,
+            origin_in_foreign_currency=instance.origin_in_foreign_currency,
+            for_purchase_exchange_sell=instance.for_purchase_exchange_sell,
+            purchase_value=instance.purchase_value,
+            for_sale_exchange_purchase=instance.for_sale_exchange_purchase,
+            sell_value=instance.sell_value,
+            balance_in_national_currency=acc_balance.balance_in_national_currency,  # noqa
+            balance_in_foreign_currency=acc_balance.balance_in_foreign_currency,  # noqa
+            total_balance_in_account=acc_balance.total_balance_in_account,
+            percent_balance_in_foreign_currency=acc_balance.percent_balance_in_foreign_currency,  # noqa
+        ).save()
